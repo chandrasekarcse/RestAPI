@@ -1,6 +1,8 @@
 package test;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import apiResponse.GetExcelData;
 import io.restassured.RestAssured;
@@ -13,6 +15,7 @@ public class PostReq {
 	GetExcelData dt;
 	static String baseURI;
 	static int expRes;
+	private static Logger logger = LoggerFactory.getLogger(PostReq.class);
 	
 	public PostReq(String path)
 	{
@@ -21,7 +24,7 @@ public class PostReq {
 	
 	public String getBaseURI()
 	{
-		
+		logger.info("Getting base URI");
 		String baseURI=(String) dt.getData(2, 1);
 		System.out.println("The BaseURI for Post is "+baseURI);
 		
@@ -30,7 +33,7 @@ public class PostReq {
 	
 	public int expecResCode()
 	{
-		
+		logger.info("Getting Expected res code");
 		int resCode=Integer.valueOf((String) dt.getData(2, 2)) ;
 		System.out.println("Expected Response for Post is "+resCode);
 		
@@ -39,6 +42,7 @@ public class PostReq {
 	
 	Response sendPostReq()
 	{
+		logger.error("Sending post Request");
 		RestAssured.baseURI=getBaseURI();
 		RestAssured.useRelaxedHTTPSValidation();
 		
@@ -56,7 +60,7 @@ public class PostReq {
 		
 		int statusCode=res.getStatusCode();
 		
-		System.out.println("The POST response body is "+res.prettyPrint());
+		//System.out.println("The POST response body is "+res.prettyPrint());
 		System.out.println("The POST status code  is "+res.getStatusCode());
 		return res;
 		
