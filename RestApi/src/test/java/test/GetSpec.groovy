@@ -32,23 +32,35 @@ class GetSpec extends Specification{
 			actResCode.getStatusCode() == expResCode
 	}
 	
-	@Unroll('ISBN value should be #b')
-	def "Authorization using Bearer Token , Validate Post  Response " ()
+		def "Authorization using Bearer Token , Validate Post  Response " ()
 	{
-			
+			given: "Intializing Objects"
 			def postObj= new SendRequest("C:\\Users\\Lenovo\\git\\RestAPI\\RestApi\\data\\TestData.xlsx")
-			def actResCode = postObj.postResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IlJlc3RBc3N1cmVkIiwicGFzc3dvcmQiOiJUZXN0MTIzNCQiLCJpYXQiOjE2MjQxOTgwMzV9.PqDgE_gBgAG8eltYw7ogI50InA-hEeimYUHoT0xlJJ8")
 			def expResCode = postObj.expPostResponseCode()
+			
+			when: "Sending Post Response"
+			def actResCode = postObj.postResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IlJlc3RBc3N1cmVkIiwicGFzc3dvcmQiOiJUZXN0MTIzNCQiLCJpYXQiOjE2MjQxOTgwMzV9.PqDgE_gBgAG8eltYw7ogI50InA-hEeimYUHoT0xlJJ8")
+						
 		
-		expect: "Validate Status code and ISBN Value added"
-			actResCode.getStatusCode() == expResCode
-			actResCode.jsonPath().get("books[0].isbn").toString().contains(b) == true
+			then: "Validate Status code and book added to user"
+			
+				actResCode.jsonPath().get("books[0].isbn").toString().contains(a) == true
 			
 			
 		where:
 			
-			a << ["isbn"]
-			b<< ["9781449337711"]
+				a << ["9781593275846"]
 		
+	}
+	
+	def "Authorization using Bearer Token,Validate Put Response" ()
+	{
+		def putObj = new SendRequest("C:\\Users\\Lenovo\\git\\RestAPI\\RestApi\\data\\TestData.xlsx")
+		def actRes = putObj.putResponse("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IlJlc3RBc3N1cmVkIiwicGFzc3dvcmQiOiJUZXN0MTIzNCQiLCJpYXQiOjE2MjQxOTgwMzV9.PqDgE_gBgAG8eltYw7ogI50InA-hEeimYUHoT0xlJJ8")
+		def expResCode  = putObj.expPutResponseCode();
+		
+		expect:
+		actRes.getStatusCode() == expResCode
+		actRes.jsonPath().get("books[0].isbn").toString().contains("9781449325862") == true
 	}
 }

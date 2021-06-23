@@ -33,6 +33,11 @@ public class SendRequest {
 		return Integer.valueOf((String)dt.getData(2, 2));
 	}
 	
+	int expPutResponseCode()
+	{
+		return Integer.valueOf((String)dt.getData(3, 2));
+	}
+	
 	Response getResponse()
 	{
 		RestAssured.baseURI=baseURI;
@@ -43,7 +48,7 @@ public class SendRequest {
 		
 		Response res=httpRequest.request(Method.GET,"/BookStore/v1/Books");
 		
-		System.out.println(res.prettyPrint());
+		res.prettyPrint();
 		
 		return res;
 	}
@@ -59,7 +64,7 @@ public class SendRequest {
 				"  \"userId\": \"50ec03f5-8fac-4bee-976a-1490c667082f\",\r\n" + 
 				"  \"collectionOfIsbns\": [\r\n" + 
 				"    {\r\n" + 
-				"      \"isbn\": \"9781449337711\"\r\n" + 
+				"      \"isbn\": \"9781593275846\"\r\n" + 
 				"    }\r\n" + 
 				"  ]\r\n" + 
 				"}";
@@ -70,7 +75,30 @@ public class SendRequest {
 		
 		Response res = httpRequest.body(addBookToUser).post("/BookStore/v1/Books");
 					
-		System.out.println(res.prettyPrint());
+		res.prettyPrint();
+		
+		return res;
+		
+	}
+	
+	Response putResponse(String token)
+	{
+		RestAssured.baseURI=baseURI;
+		
+		RequestSpecification httpRequest= RestAssured.given();
+		
+		String payload = "{\r\n" + 
+				"  \"userId\": \"50ec03f5-8fac-4bee-976a-1490c667082f\",\r\n" + 
+				"  \"isbn\": \"9781449325862\"\r\n" + 
+				"}";
+		
+		httpRequest.header("Authorization","Bearer "+token).header("Content-Type","application/json");
+		
+		logger.info("Sending Put Request");
+		
+		Response res=httpRequest.body(payload).put("/BookStore/v1/Books/9781593275846");
+		
+		res.prettyPrint();
 		
 		return res;
 		
