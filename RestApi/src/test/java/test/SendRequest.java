@@ -37,7 +37,10 @@ public class SendRequest {
 	{
 		return Integer.valueOf((String)dt.getData(3, 2));
 	}
-	
+	int expDeleteResponseCode()
+	{
+		return Integer.valueOf((String)dt.getData(4, 2));
+	}
 	Response getResponse()
 	{
 		RestAssured.baseURI=baseURI;
@@ -100,6 +103,29 @@ public class SendRequest {
 		
 		res.prettyPrint();
 		
+		return res;
+		
+	}
+	
+	Response deleteResponse(String token)
+	{
+		RestAssured.baseURI=baseURI;
+		
+		RequestSpecification httpRequest = RestAssured.given();
+		
+		String payload = "{\r\n" + 
+				"  \"isbn\": \"9781449325862\",\r\n" + 
+				"  \"userId\": \"50ec03f5-8fac-4bee-976a-1490c667082f\"\r\n" + 
+				"}";
+		
+		httpRequest.header("Authorization","Bearer "+token).header("Content-Type","application/json");
+		
+		logger.info("Sending Delete Request");
+		
+		Response res = httpRequest.body(payload).delete("/BookStore/v1/Book");
+		
+		res.prettyPrint();
+				
 		return res;
 		
 	}
